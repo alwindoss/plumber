@@ -1,12 +1,8 @@
 package plumber
 
-// type Message1 interface {
-// 	Get() []byte
-// 	Set([]byte)
-// }
+import "io"
 
 // Message is an interface that needs to be implemented by the messages of the pipeline
-type Message struct {
-	Header []byte
-	Body   []byte
+type Message interface {
+	io.ReadWriter
 }

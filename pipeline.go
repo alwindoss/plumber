@@ -40,18 +40,18 @@ func (pipe *pipeline) AddSink(s Sinker) Pipeline {
 }
 
 func (pipe *pipeline) Run() {
-	sourceOutCh := make(chan *Message)
+	sourceOutCh := make(chan Message)
 	go pipe.source.Source(sourceOutCh)
 
 	totalProcs := len(pipe.processors)
-	var sinkInCh chan *Message
+	var sinkInCh chan Message
 
 	for i, processor := range pipe.processors {
-		procOutCh := make(chan *Message)
+		procOutCh := make(chan Message)
 		if i == 0 {
 			processor.Process(sourceOutCh, procOutCh)
 		} else {
-			procInCh := make(chan *Message)
+			procInCh := make(chan Message)
 			processor.Process(procInCh, procOutCh)
 			if i == (totalProcs - 1) {
 				sinkInCh = procOutCh
